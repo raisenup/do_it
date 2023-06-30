@@ -1,0 +1,32 @@
+name: do_it
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.6
+  provider: ^6.0.5
+
+  google_fonts: ^5.0.0
+  google_sign_in: ^6.1.4
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
+  flutter_web_auth: ^0.5.0
+  cloud_firestore: ^4.8.1
+  flutter_colorpicker: ^1.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/bgs/
+    - assets/images/icons/
