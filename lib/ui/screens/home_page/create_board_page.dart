@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateBoardPage extends StatefulWidget {
   const CreateBoardPage({super.key});
@@ -22,15 +23,14 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
   }
 
   void _submitForm() async {
-    // process data here
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
 
     final board =
-        KanbanBoard(name: _controller.text, iconColor: currentColor.value , members: ['${user?.email}']);
+        KanbanBoard(uuid: const Uuid().v4(), name: _controller.text, iconColor: currentColor.value, members: [user?.email]);
 
     final ref =
-        db.collection('${user?.uid}').doc('${board.name}').withConverter(
+        db.collection('boards').doc('${board.uuid}').withConverter(
               fromFirestore: KanbanBoard.fromFirestore,
               toFirestore: (KanbanBoard board, _) => board.toFirestore(),
             );
@@ -40,7 +40,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
     Navigator.pop(context);
   }
 
-  Color currentColor = Colors.amber;
+  Color currentColor = const Color(0xFF9000FF);
   void changeColor(Color color) => setState(() => currentColor = color);
 
   @override

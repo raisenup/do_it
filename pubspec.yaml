@@ -18,7 +18,10 @@ dependencies:
   firebase_auth: ^4.6.3
   flutter_web_auth: ^0.5.0
   cloud_firestore: ^4.8.1
+
   flutter_colorpicker: ^1.0.3
+  uuid: ^3.0.7
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +33,9 @@ flutter:
   assets:
     - assets/images/bgs/
     - assets/images/icons/
+    - assets/images/icons/login/
+
+flutter_launcher_icons:
+  android: 'assets/images/icons/icon.png'
+  image_path: 'assets/images/icons/icon.png'
+  min_sdk_android: 21

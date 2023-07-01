@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                         "Sign up with Google",
                         style: TextStyle(color: Colors.black),
                       ),
-                      icon: SvgPicture.asset("assets/images/icons/google.svg"),
+                      icon: SvgPicture.asset("assets/images/icons/login/google.svg"),
                       style: ButtonStyle(
                         overlayColor: MaterialStateProperty.all(
                             Colors.black.withOpacity(0.05)),
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                         provider.githubLogin(context);
                       },
                       label: const Text("Sign up with GitHub"),
-                      icon: SvgPicture.asset("assets/images/icons/github.svg"),
+                      icon: SvgPicture.asset("assets/images/icons/login/github.svg"),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.black),
                       ),

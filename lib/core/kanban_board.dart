@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KanbanBoard {
-  String? name;
-  int? iconColor;
-  List<dynamic>? members;
+  final String? uuid;
+  final String? name;
+  final int? iconColor;
+  final List<dynamic>? members;
   List<dynamic>? sections;
 
   KanbanBoard({
+    this.uuid,
     required this.name,
-    this.iconColor = 0xff808080,
+    this.iconColor,
     this.members = const [],
     this.sections = const [
       {
@@ -32,7 +34,9 @@ class KanbanBoard {
   ) {
     final data = snapshot.data();
     return KanbanBoard(
+      uuid: data?['uuid'],
       name: data?['name'],
+      iconColor: data?['icon_color'],
       members: data?['members'],
       sections: data?['sections'],
     );
@@ -40,6 +44,7 @@ class KanbanBoard {
 
   Map<String, dynamic> toFirestore() {
     return {
+      if (uuid != null) "uuid": uuid,
       if (name != null) "name": name,
       if (iconColor != null) "icon_color": iconColor,
       if (members != null) "members": members,

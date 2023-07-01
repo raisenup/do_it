@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_it/core/kanban_board.dart';
 import 'package:flutter/material.dart';
 import 'package:do_it/core/email_validator.dart';
@@ -17,7 +18,17 @@ class _AddMembersPageState extends State<AddMembersPage> {
   final _formKey = GlobalKey<FormState>();
   final _controller = TextEditingController();
 
-  void _submitForm() async {}
+  void _submitForm() async {
+    final db = FirebaseFirestore.instance;
+    final uuid = widget.board?.uuid.toString();
+
+    debugPrint(uuid);
+    final ref = db.collection('boards').doc(uuid);
+
+    ref.update({'members' : FieldValue.arrayUnion([_controller.text])});
+    
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +57,25 @@ class _AddMembersPageState extends State<AddMembersPage> {
         key: _formKey,
         child: ListView(
           children: [
-            TextFormField(
-              controller: _controller,
-              autofocus: true,
-              validator: (value) =>
-                  value!.isValidEmail() ? null : 'Non-valid email.',
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextFormField(
+                controller: _controller,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(style: BorderStyle.solid)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Color(0xff6750a4),
+                    width: 2,
+                  )),
+                  floatingLabelStyle: TextStyle(color: Color(0xff6750a4)),
+                  labelText: "Email",
+                ),
+                validator: (value) =>
+                    value!.isValidEmail() ? null : 'Wrong input.',
+              ),
             ),
           ],
         ),

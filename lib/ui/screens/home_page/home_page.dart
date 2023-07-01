@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final Stream<QuerySnapshot> userStream =
-        FirebaseFirestore.instance.collection('${user?.uid}').snapshots();
+        FirebaseFirestore.instance.collection('boards').where('members.${user?.email}', isGreaterThan: null).snapshots();
     String appBarTitle = currentBoard!.name!;
     bool isBlankBoard = true;
 
@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     void changeBoard(item) {
       setState(() {
         currentBoard = KanbanBoard(
+            uuid: item['uuid'],
             name: item['name'],
             members: item['members'],
             iconColor: item['icon_color'],
