@@ -23,7 +23,9 @@ class MainApp extends StatelessWidget {
     ],
     child: MaterialApp(
         title: "do it.",
-        theme: ThemeData(primaryColor: Colors.white),
+        theme: ThemeData(
+          useMaterial3: true
+        ),
         debugShowCheckedModeBanner: false,
         home: const Scaffold(
           body: StreamHandler(),

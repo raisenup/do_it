@@ -51,7 +51,6 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
           "Create new board",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.black),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
         centerTitle: true,

@@ -15,34 +15,44 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  KanbanBoard? currentBoard = KanbanBoard(name: '');
+  KanbanBoard? currentBoard = const KanbanBoard(name: '');
+
+  void changeBoard(item) {
+    setState(() {
+      currentBoard = KanbanBoard(
+        uuid: item['uuid'],
+        name: item['name'],
+        members: item['members'],
+        iconColor: item['icon_color'],
+        sections: item['sections'],
+      );
+    });
+    Navigator.pop(context);
+  }
+
+  void deleteBoard() async {
+    await FirebaseFirestore.instance
+        .collection('boards')
+        .doc(currentBoard?.uuid)
+        .delete()
+        .then(
+          (value) => debugPrint("Board deleted successfully."),
+        )
+        .catchError(
+      (e) {
+        debugPrint("Failed to delete board: $e");
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final Stream<QuerySnapshot> userStream =
-        FirebaseFirestore.instance.collection('boards').where('members.${user?.email}', isGreaterThan: null).snapshots();
+    final Stream<QuerySnapshot> userStream = FirebaseFirestore.instance
+        .collection('boards')
+        .where('members', arrayContains: '${user?.email}')
+        .snapshots();
     String appBarTitle = currentBoard!.name!;
-    bool isBlankBoard = true;
-
-    if (appBarTitle == '') {
-      isBlankBoard = true;
-    } else {
-      isBlankBoard = false;
-    }
-
-    void changeBoard(item) {
-      setState(() {
-        currentBoard = KanbanBoard(
-            uuid: item['uuid'],
-            name: item['name'],
-            members: item['members'],
-            iconColor: item['icon_color'],
-            sections: item['sections']);
-        appBarTitle = currentBoard!.name!;
-      });
-      Navigator.pop(context);
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -66,9 +76,64 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           if (appBarTitle != '')
-            IconButton(
-              icon: const Icon(Icons.more_vert_rounded),
-              onPressed: () {},
+            PopupMenuButton(
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: 0,
+                    child: Text("Delete board"),
+                  )
+                ];
+              },
+              onSelected: (value) {
+                if (value == 0) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Are you sure you want to delete \"${currentBoard?.name}\"?",
+                          textAlign: TextAlign.center,
+                        ),
+                        content: SizedBox(
+                          width: 500,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FilledButton.icon(
+                                onPressed: () {
+                                  deleteBoard();
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    currentBoard = const KanbanBoard(name: '');
+                                  });
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.red),
+                                ),
+                                icon: const Icon(Icons.delete_forever),
+                                label: const Text("Delete"),
+                              ),
+                              OutlinedButton.icon(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(Icons.close),
+                                label: const Text(
+                                  "Cancel",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             )
         ],
       ),
@@ -137,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       title: const Text("Create new board"),
                       onTap: () {
-                        if (boards.length < 7) {
+                        if (boards.length < 10) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -151,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                           scaffoldMessenger.showSnackBar(
                             const SnackBar(
                               content:
-                                  Text("Your limit of 7 boards is reached"),
+                                  Text("Your limit of 10 boards is reached"),
                             ),
                           );
                         }
@@ -164,8 +229,9 @@ class _HomePageState extends State<HomePage> {
                     child: const Text(
                       "Other",
                       style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff49454f)),
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff49454f),
+                      ),
                     ),
                   ),
                   Padding(
@@ -204,7 +270,45 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      body: isBlankBoard ? Container() : KanbanBoardPage(board: currentBoard),
+      body: appBarTitle == ''
+          ? const Center(
+              child: Text(
+                'Choose or create board in menu',
+                style: TextStyle(
+                  color: Color(0xff7d7d7d),
+                ),
+              ),
+            )
+          : StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('boards')
+                  .doc(currentBoard!.uuid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text('Loading...');
+                }
+
+                if (snapshot.hasData) {
+                  var data = snapshot.data!.data();
+                  return KanbanBoardPage(
+                    board: KanbanBoard(
+                      uuid: data?['uuid'],
+                      name: data?['name'],
+                      members: data?['members'],
+                      iconColor: data?['icon_color'],
+                      sections: data?['sections'],
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
     );
   }
 }

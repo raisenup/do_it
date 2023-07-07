@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -60,18 +61,22 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                     child: TextButton.icon(
                       onPressed: () {
-                        final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                        final provider = Provider.of<GoogleSignInProvider>(
+                            context,
+                            listen: false);
                         provider.googleLogin();
                       },
                       label: const Text(
                         "Sign up with Google",
                         style: TextStyle(color: Colors.black),
                       ),
-                      icon: SvgPicture.asset("assets/images/icons/login/google.svg"),
+                      icon: SvgPicture.asset(
+                          "assets/images/icons/login/google.svg"),
                       style: ButtonStyle(
                         overlayColor: MaterialStateProperty.all(
                             Colors.black.withOpacity(0.05)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(90.0),
                             side: const BorderSide(color: Colors.black),
@@ -88,13 +93,17 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                     child: FilledButton.icon(
                       onPressed: () {
-                        final provider = Provider.of<GithubSignInProvider>(context, listen: false);
+                        final provider = Provider.of<GithubSignInProvider>(
+                            context,
+                            listen: false);
                         provider.githubLogin(context);
                       },
                       label: const Text("Sign up with GitHub"),
-                      icon: SvgPicture.asset("assets/images/icons/login/github.svg"),
+                      icon: SvgPicture.asset(
+                          "assets/images/icons/login/github.svg"),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.black),
                       ),
                     ),
                   ),

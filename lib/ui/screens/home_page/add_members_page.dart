@@ -22,7 +22,6 @@ class _AddMembersPageState extends State<AddMembersPage> {
     final db = FirebaseFirestore.instance;
     final uuid = widget.board?.uuid.toString();
 
-    debugPrint(uuid);
     final ref = db.collection('boards').doc(uuid);
 
     ref.update({'members' : FieldValue.arrayUnion([_controller.text])});

@@ -5,9 +5,9 @@ class KanbanBoard {
   final String? name;
   final int? iconColor;
   final List<dynamic>? members;
-  List<dynamic>? sections;
+  final List<dynamic>? sections;
 
-  KanbanBoard({
+  const KanbanBoard({
     this.uuid,
     required this.name,
     this.iconColor,
