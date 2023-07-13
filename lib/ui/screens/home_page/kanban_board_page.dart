@@ -154,7 +154,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
   }
 
   void moveTaskToSection(oldSectionIndex, newSectionIndex, taskIndex) async {
-       final db = FirebaseFirestore.instance;
+    final db = FirebaseFirestore.instance;
     final uuid = widget.board?.uuid.toString();
     final ref = db.collection('boards').doc(uuid);
     await ref.get().then(
@@ -176,7 +176,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
               );
         }
       },
-    ); 
+    );
   }
 
   void selectDate() async {
@@ -455,7 +455,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InputChip(
-                        avatar: const Icon(Icons.calendar_month_outlined),
+                        avatar: Icon(
+                          Icons.calendar_month_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Due date",
                           style: TextStyle(
@@ -466,7 +469,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                         },
                       ),
                       InputChip(
-                        avatar: const Icon(Icons.priority_high_outlined),
+                        avatar: Icon(
+                          Icons.priority_high_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Priority",
                           style: TextStyle(
@@ -477,7 +483,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                         },
                       ),
                       InputChip(
-                        avatar: const Icon(Icons.person_outline_outlined),
+                        avatar: Icon(
+                          Icons.person_outline_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Assign to",
                           style: TextStyle(
@@ -600,7 +609,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InputChip(
-                        avatar: const Icon(Icons.calendar_month_outlined),
+                        avatar: Icon(
+                          Icons.calendar_month_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Due date",
                           style: TextStyle(
@@ -611,7 +623,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                         },
                       ),
                       InputChip(
-                        avatar: const Icon(Icons.priority_high_outlined),
+                        avatar: Icon(
+                          Icons.priority_high_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Priority",
                           style: TextStyle(
@@ -622,7 +637,10 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                         },
                       ),
                       InputChip(
-                        avatar: const Icon(Icons.person_outline_outlined),
+                        avatar: Icon(
+                          Icons.person_outline_outlined,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         label: const Text(
                           "Assign to",
                           style: TextStyle(
@@ -659,14 +677,16 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: DropdownButton(
                           value: selectedSectionIndex,
-                          items: widget.board!.sections!.map(
-                            (e) => DropdownMenuItem(
-                              value: widget.board!.sections!.indexOf(e),
-                              child: Text(
-                                e['title'].toString(),
-                              ),
-                            ),
-                          ).toList(),
+                          items: widget.board!.sections!
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: widget.board!.sections!.indexOf(e),
+                                  child: Text(
+                                    e['title'].toString(),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                           onChanged: (value) {
                             setState(() {
                               selectedSectionIndex = value;
@@ -934,20 +954,38 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                                                           MaterialStateProperty
                                                               .all(Colors.red),
                                                     ),
-                                                    icon: const Icon(
-                                                        Icons.delete_forever),
-                                                    label: const Text("Delete"),
+                                                    icon: Icon(
+                                                      Icons.delete_forever,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    label: Text(
+                                                      "Delete",
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                      ),
+                                                    ),
                                                   ),
                                                   OutlinedButton.icon(
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                     },
-                                                    icon:
-                                                        const Icon(Icons.close),
-                                                    label: const Text(
+                                                    icon: Icon(
+                                                      Icons.close,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    label: Text(
                                                       "Cancel",
                                                       style: TextStyle(
-                                                          color: Colors.black),
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -972,11 +1010,48 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                             physics: const NeverScrollableScrollPhysics(),
                             onReorder: ((oldIndex, newIndex) {
                               moveTask(sectionIndex, oldIndex, newIndex);
+
+                              // blinking fix
+                              if (newIndex > tasks.length) {
+                                newIndex = tasks.length;
+                              }
+                              if (oldIndex < newIndex) newIndex--;
+                              setState(() {
+                                var task = sections[sectionIndex]['tasks']
+                                    .removeAt(oldIndex);
+                                sections[sectionIndex]['tasks']
+                                    .insert(newIndex, task);
+                              });
                             }),
                             shrinkWrap: true,
                             children: [
                               ...tasks.map(
                                 (item) {
+                                  // fix of one item in tasks bug
+                                  if (tasks.length <= 2) {
+                                    return GestureDetector(
+                                      key: ValueKey(item),
+                                      onLongPress:
+                                          () {}, // removes ability to move task, and fixes the bug
+                                      child: TaskWidget(
+                                        editingCallback:
+                                            showEditingTaskBottomSheet,
+                                        context: context,
+                                        sectionIndex: sectionIndex,
+                                        taskIndex: tasks.indexOf(item),
+                                        task: Task(
+                                          title: item['title'],
+                                          description: item['description'],
+                                          priority: item['priority'],
+                                          dueDate: item['due_date'] != null
+                                              ? dateFormat
+                                                  .parse(item['due_date'])
+                                              : null,
+                                          assignedTo: item['assigned_to'],
+                                        ),
+                                      ),
+                                    );
+                                  }
                                   return TaskWidget(
                                     key: ValueKey(item),
                                     editingCallback: showEditingTaskBottomSheet,
@@ -1003,22 +1078,27 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                               height: 60,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xff000000)
-                                        .withOpacity(0.15),
-                                    blurRadius: 12,
-                                    spreadRadius: 6,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0xff000000)
-                                        .withOpacity(0.3),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ],
-                                color: const Color(0xfffffbfe),
+                                boxShadow: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? [
+                                        BoxShadow(
+                                          color: const Color(0xff000000)
+                                              .withOpacity(0.15),
+                                          blurRadius: 12,
+                                          spreadRadius: 6,
+                                          offset: const Offset(0, 8),
+                                        ),
+                                        BoxShadow(
+                                          color: const Color(0xff000000)
+                                              .withOpacity(0.3),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 4),
+                                        )
+                                      ]
+                                    : [],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
                               ),
                               child: TextButton(
                                 style: ButtonStyle(
@@ -1031,20 +1111,22 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                                     ),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 20),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.add_rounded,
+                                      const Icon(Icons.add_rounded,
                                           color: Colors.deepPurple, size: 30),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 6),
+                                        padding: const EdgeInsets.only(left: 6),
                                         child: Text(
                                           "Add task",
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                           ),
@@ -1087,15 +1169,15 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                                 ),
                               ),
                             ),
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.add,
                               size: 30,
-                              color: Colors.black,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
-                            label: const Text(
+                            label: Text(
                               "Add section",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
                               ),

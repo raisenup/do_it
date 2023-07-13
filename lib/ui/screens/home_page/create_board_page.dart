@@ -26,18 +26,17 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
 
-    final board =
-        KanbanBoard(uuid: const Uuid().v4(), name: _controller.text, iconColor: currentColor.value, members: [user?.email]);
+    final board = KanbanBoard(
+        uuid: const Uuid().v4(),
+        name: _controller.text,
+        iconColor: currentColor.value,
+        members: [user?.email]);
 
-    final ref =
-        db.collection('boards').doc('${board.uuid}').withConverter(
-              fromFirestore: KanbanBoard.fromFirestore,
-              toFirestore: (KanbanBoard board, _) => board.toFirestore(),
-            );
+    final ref = db.collection('boards').doc('${board.uuid}').withConverter(
+          fromFirestore: KanbanBoard.fromFirestore,
+          toFirestore: (KanbanBoard board, _) => board.toFirestore(),
+        );
     await ref.set(board);
-
-    if (!context.mounted) return;
-    Navigator.pop(context);
   }
 
   Color currentColor = const Color(0xFF9000FF);
@@ -51,7 +50,6 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
           "Create new board",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        iconTheme: const IconThemeData(color: Colors.black),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
         centerTitle: true,
         actions: [
@@ -60,6 +58,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   _submitForm();
+                  Navigator.pop(context);
                 }
               },
               icon: const Icon(Icons.check_rounded)),
@@ -97,14 +96,17 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
               child: ListTile(
-                leading: const Icon(Icons.color_lens, size: 35,),
-                
+                leading: const Icon(
+                  Icons.color_lens,
+                  size: 35,
+                ),
                 iconColor: currentColor,
                 title: const Text(
                   "Color",
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                 ),
-                subtitle: Text('#${(currentColor.value.toRadixString(16).padLeft(6, '0')).substring(2).toUpperCase()}'),
+                subtitle: Text(
+                    '#${(currentColor.value.toRadixString(16).padLeft(6, '0')).substring(2).toUpperCase()}'),
                 onTap: () {
                   showDialog(
                     context: context,

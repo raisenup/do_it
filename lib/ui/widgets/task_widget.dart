@@ -69,7 +69,7 @@ class _TaskWidgetState extends State<TaskWidget> {
     final assignedTo = widget.task!.assignedTo!;
 
     return SizedBox(
-      width: 100,
+      width: 90,
       height: 30,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -95,8 +95,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                   );
                 }
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return const CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Colors.grey,
                 );
               }
             },
@@ -142,17 +143,17 @@ class _TaskWidgetState extends State<TaskWidget> {
           (dueDate.year == now.year &&
               dueDate.month == now.month &&
               dueDate.day == now.day)) {
-        dueDateColor = Colors.black;
+        dueDateColor = Theme.of(context).colorScheme.onSurface;
       } else {
         dueDateColor = Colors.red;
       }
     }
 
     Color? priorityColor;
-    if(widget.sectionIndex == 2) {
+    if (widget.sectionIndex == 2) {
       priorityColor = priorityColors[0];
-    }
-    else if (widget.task?.priority != null) {
+      dueDateColor = const Color(0xff777777);
+    } else if (widget.task?.priority != null) {
       priorityColor = priorityColors[widget.task!.priority!];
     } else {
       priorityColor = null;
@@ -166,21 +167,23 @@ class _TaskWidgetState extends State<TaskWidget> {
             width: width - 50,
             height: taskHeight,
             decoration: BoxDecoration(
-              color: const Color(0xfffffbfe),
+              color: Theme.of(context).colorScheme.onInverseSurface,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff000000).withOpacity(0.15),
-                  blurRadius: 12,
-                  spreadRadius: 6,
-                  offset: const Offset(0, 8),
-                ),
-                BoxShadow(
-                  color: const Color(0xff000000).withOpacity(0.3),
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                )
-              ],
+              boxShadow: Theme.of(context).brightness == Brightness.light
+                  ? [
+                      BoxShadow(
+                        color: const Color(0xff000000).withOpacity(0.15),
+                        blurRadius: 12,
+                        spreadRadius: 6,
+                        offset: const Offset(0, 8),
+                      ),
+                      BoxShadow(
+                        color: const Color(0xff000000).withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 4),
+                      )
+                    ]
+                  : [],
             ),
             child: Stack(
               children: [
@@ -200,10 +203,11 @@ class _TaskWidgetState extends State<TaskWidget> {
                                 width: 280,
                                 child: Text(
                                   widget.task!.title.toString(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 20,
-                                    color: Colors.black,
+                                    color: widget.sectionIndex == 2 ? const Color(0xff777777) : Theme.of(context).colorScheme.onSurface,
                                     fontWeight: FontWeight.normal,
+                                    decoration: widget.sectionIndex == 2 ? TextDecoration.lineThrough : TextDecoration.none,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -216,10 +220,11 @@ class _TaskWidgetState extends State<TaskWidget> {
                                   width: 250,
                                   child: Text(
                                     widget.task!.description.toString(),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 15,
-                                      color: Color(0xff777777),
+                                      color:const Color(0xff777777),
                                       fontWeight: FontWeight.normal,
+                                      decoration: widget.sectionIndex == 2 ? TextDecoration.lineThrough : TextDecoration.none,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -237,11 +242,12 @@ class _TaskWidgetState extends State<TaskWidget> {
                                       size: 20,
                                     ),
                                     Text(
-                                      " Due ${getDueDate()}",
+                                      " Due ${getDueDate()} ",
                                       style: TextStyle(
                                         color: dueDateColor,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 15,
+                                        decoration: widget.sectionIndex == 2 ? TextDecoration.lineThrough : TextDecoration.none,
                                       ),
                                     ),
                                   ],

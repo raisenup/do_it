@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:do_it/ui/screens/home_page/remove_member_page.dart';
+import 'package:do_it/ui/screens/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,6 +47,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void leaveBoard() async {
+    currentBoard!.members!.removeWhere(
+        (element) => element == FirebaseAuth.instance.currentUser!.email!);
+    await FirebaseFirestore.instance
+        .collection('boards')
+        .doc(currentBoard?.uuid)
+        .set({'members': currentBoard!.members!}, SetOptions(merge: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -57,11 +68,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
-        titleTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 22, fontWeight: FontWeight.w500),
+        titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontSize: 22,
+          fontWeight: FontWeight.w500,
+        ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.onSurface),
         actions: [
           if (appBarTitle != '')
             IconButton(
@@ -82,6 +96,14 @@ class _HomePageState extends State<HomePage> {
                   const PopupMenuItem(
                     value: 0,
                     child: Text("Delete board"),
+                  ),
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text("Remove member"),
+                  ),
+                  const PopupMenuItem(
+                    value: 2,
+                    child: Text("Leave board"),
                   )
                 ];
               },
@@ -113,17 +135,34 @@ class _HomePageState extends State<HomePage> {
                                   backgroundColor:
                                       MaterialStateProperty.all(Colors.red),
                                 ),
-                                icon: const Icon(Icons.delete_forever),
-                                label: const Text("Delete"),
+                                icon: Icon(
+                                  Icons.delete_forever,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                                label: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
                               ),
                               OutlinedButton.icon(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                icon: const Icon(Icons.close),
-                                label: const Text(
+                                icon: Icon(
+                                  Icons.close,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                                label: Text(
                                   "Cancel",
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
                                 ),
                               ),
                             ],
@@ -132,6 +171,23 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   );
+                } else if (value == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RemoveMemberPage(
+                        board: currentBoard,
+                      ),
+                    ),
+                  );
+                } else if (value == 2) {
+                  leaveBoard();
+                  if(currentBoard!.members!.isEmpty) {
+                    deleteBoard();
+                  }
+                  setState(() {
+                    currentBoard = const KanbanBoard(name: '');
+                  });
                 }
               },
             )
@@ -158,22 +214,24 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding:
                         const EdgeInsets.only(top: 30, left: 28, bottom: 18),
-                    child: const Text(
+                    child: Text(
                       "Menu",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: Color(0xff49454f)),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
                   ),
                   Container(
                     padding:
                         const EdgeInsets.only(top: 18, left: 28, bottom: 18),
-                    child: const Text(
+                    child: Text(
                       "Kanban boards",
                       style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff49454f)),
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
                   ),
                   ...boards.map(
@@ -198,7 +256,6 @@ class _HomePageState extends State<HomePage> {
                       minLeadingWidth: 4,
                       leading: const Icon(
                         Icons.add,
-                        color: Colors.black,
                       ),
                       title: const Text("Create new board"),
                       onTap: () {
@@ -226,11 +283,11 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding:
                         const EdgeInsets.only(top: 18, left: 28, bottom: 18),
-                    child: const Text(
+                    child: Text(
                       "Other",
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Color(0xff49454f),
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                   ),
@@ -240,10 +297,16 @@ class _HomePageState extends State<HomePage> {
                       minLeadingWidth: 4,
                       leading: const Icon(
                         Icons.settings_rounded,
-                        color: Colors.black,
                       ),
                       title: const Text("Settings"),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -252,7 +315,6 @@ class _HomePageState extends State<HomePage> {
                       minLeadingWidth: 4,
                       leading: const Icon(
                         Icons.keyboard_return_rounded,
-                        color: Colors.black,
                       ),
                       title: const Text("Logout"),
                       onTap: () async {
@@ -290,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text('Loading...');
+                  return const Center(child: Text('Loading...'));
                 }
 
                 if (snapshot.hasData) {

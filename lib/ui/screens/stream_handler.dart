@@ -18,7 +18,7 @@ class StreamHandler extends StatelessWidget {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userEmail)
-          .set({'photo_url': photoUrl, 'name': name}).then((value) {
+          .set({'photo_url': photoUrl, 'name': name}, SetOptions(merge: true)).then((value) {
         debugPrint("User's data successfully stored in Firestore.");
       }).catchError((error) {
         debugPrint("Failed to store user's data:\n${error.toString()}");

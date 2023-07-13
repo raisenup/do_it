@@ -24,8 +24,10 @@ class _AddMembersPageState extends State<AddMembersPage> {
 
     final ref = db.collection('boards').doc(uuid);
 
-    ref.update({'members' : FieldValue.arrayUnion([_controller.text])});
-    
+    ref.update({
+      'members': FieldValue.arrayUnion([_controller.text])
+    });
+
     Navigator.pop(context);
   }
 
@@ -33,14 +35,15 @@ class _AddMembersPageState extends State<AddMembersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Add members",
           style: TextStyle(
-              color: Colors.black, fontSize: 22, fontWeight: FontWeight.w500),
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
         actions: [
           IconButton(
               onPressed: () {
