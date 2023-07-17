@@ -379,7 +379,6 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
 
   void showNewTaskBottomSheet(context, index) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     _taskTitleController.clear();
     _taskDescriptionController.clear();
     taskSelectedDate = null;
@@ -395,131 +394,131 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
       builder: (context) {
         return Wrap(
           children: [
-            Form(
-              key: _taskFormKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15, left: 20, right: 20),
-                    child: TextFormField(
-                      controller: _taskTitleController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required';
-                        }
-                        return null;
-                      },
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      cursorColor: const Color(0xff6750a4),
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        hintText: 'Name',
-                        hintStyle: TextStyle(
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Form(
+                key: _taskFormKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 20, right: 20),
+                      child: TextFormField(
+                        controller: _taskTitleController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                         ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: SizedBox(
-                      width: width,
-                      child: TextFormField(
-                        controller: _taskDescriptionController,
-                        style: const TextStyle(
-                          color: Color(0xff7d7d7d),
-                          fontSize: 20,
-                        ),
                         cursorColor: const Color(0xff6750a4),
+                        autofocus: true,
                         decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
-                          hintText: 'Description',
+                          hintText: 'Name',
                           hintStyle: TextStyle(
-                            color: Color(0xff7d7d7d),
-                            fontSize: 20,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InputChip(
-                        avatar: Icon(
-                          Icons.calendar_month_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10),
+                      child: SizedBox(
+                        width: width,
+                        child: TextFormField(
+                          controller: _taskDescriptionController,
+                          style: const TextStyle(
+                            color: Color(0xff7d7d7d),
+                            fontSize: 20,
+                          ),
+                          cursorColor: const Color(0xff6750a4),
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            border: InputBorder.none,
+                            hintText: 'Description',
+                            hintStyle: TextStyle(
+                              color: Color(0xff7d7d7d),
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
-                        label: const Text(
-                          "Due date",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectDate();
-                        },
-                      ),
-                      InputChip(
-                        avatar: Icon(
-                          Icons.priority_high_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        label: const Text(
-                          "Priority",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectPriority();
-                        },
-                      ),
-                      InputChip(
-                        avatar: Icon(
-                          Icons.person_outline_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        label: const Text(
-                          "Assign to",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectAssignedTo();
-                        },
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: FilledButton.icon(
-                        icon: const Icon(Icons.add),
-                        label: const Text("Add task"),
-                        onPressed: () {
-                          if (_taskFormKey.currentState!.validate()) {
-                            addTask(index);
-                            Navigator.pop(context);
-                          }
-                        },
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: width,
-                    height: height / 2.7,
-                  )
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InputChip(
+                          avatar: Icon(
+                            Icons.calendar_month_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Due date",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            selectDate();
+                          },
+                        ),
+                        InputChip(
+                          avatar: Icon(
+                            Icons.priority_high_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Priority",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            selectPriority();
+                          },
+                        ),
+                        InputChip(
+                          avatar: Icon(
+                            Icons.person_outline_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Assign to",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            selectAssignedTo();
+                          },
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8, bottom: 8),
+                        child: FilledButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text("Add task"),
+                          onPressed: () {
+                            if (_taskFormKey.currentState!.validate()) {
+                              addTask(index);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -530,7 +529,6 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
 
   void showEditingTaskBottomSheet(context, sectionIndex, taskIndex) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     final task = widget.board!.sections![sectionIndex]['tasks'][taskIndex];
     _taskTitleController.text = task['title'];
@@ -549,173 +547,177 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
       builder: (context) {
         return Wrap(
           children: [
-            Form(
-              key: _taskFormKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15, left: 20, right: 20),
-                    child: TextFormField(
-                      controller: _taskTitleController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required';
-                        }
-                        return null;
-                      },
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      cursorColor: const Color(0xff6750a4),
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        hintText: 'Name',
-                        hintStyle: TextStyle(
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Form(
+                key: _taskFormKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 20, right: 20),
+                      child: TextFormField(
+                        controller: _taskTitleController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                         ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: SizedBox(
-                      width: width,
-                      child: TextFormField(
-                        controller: _taskDescriptionController,
-                        style: const TextStyle(
-                          color: Color(0xff7d7d7d),
-                          fontSize: 20,
-                        ),
                         cursorColor: const Color(0xff6750a4),
+                        autofocus: true,
                         decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
-                          hintText: 'Description',
+                          hintText: 'Name',
                           hintStyle: TextStyle(
-                            color: Color(0xff7d7d7d),
-                            fontSize: 20,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InputChip(
-                        avatar: Icon(
-                          Icons.calendar_month_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        label: const Text(
-                          "Due date",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectDate();
-                        },
-                      ),
-                      InputChip(
-                        avatar: Icon(
-                          Icons.priority_high_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        label: const Text(
-                          "Priority",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectPriority();
-                        },
-                      ),
-                      InputChip(
-                        avatar: Icon(
-                          Icons.person_outline_outlined,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        label: const Text(
-                          "Assign to",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        ),
-                        onPressed: () {
-                          selectAssignedTo();
-                        },
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          onPressed: () {
-                            deleteTask(sectionIndex, taskIndex);
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.red),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10),
+                      child: SizedBox(
+                        width: width,
+                        child: TextFormField(
+                          controller: _taskDescriptionController,
+                          style: const TextStyle(
+                            color: Color(0xff7d7d7d),
+                            fontSize: 20,
                           ),
-                          icon: const Icon(
-                            Icons.delete_forever,
-                            color: Colors.white,
+                          cursorColor: const Color(0xff6750a4),
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            border: InputBorder.none,
+                            hintText: 'Description',
+                            hintStyle: TextStyle(
+                              color: Color(0xff7d7d7d),
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DropdownButton(
-                          value: selectedSectionIndex,
-                          items: widget.board!.sections!
-                              .map(
-                                (e) => DropdownMenuItem(
-                                  value: widget.board!.sections!.indexOf(e),
-                                  child: Text(
-                                    e['title'].toString(),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedSectionIndex = value;
-                              moveTaskToSection(sectionIndex, value, taskIndex);
-                            });
-                            Navigator.pop(context);
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InputChip(
+                          avatar: Icon(
+                            Icons.calendar_month_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Due date",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            selectDate();
                           },
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FilledButton.icon(
-                          icon: const Icon(Icons.add),
-                          label: const Text("Save task"),
+                        InputChip(
+                          avatar: Icon(
+                            Icons.priority_high_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Priority",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
                           onPressed: () {
-                            if (_taskFormKey.currentState!.validate()) {
-                              saveTask(sectionIndex, taskIndex);
+                            selectPriority();
+                          },
+                        ),
+                        InputChip(
+                          avatar: Icon(
+                            Icons.person_outline_outlined,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          label: const Text(
+                            "Assign to",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            selectAssignedTo();
+                          },
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, bottom: 8),
+                          child: IconButton(
+                            onPressed: () {
+                              deleteTask(sectionIndex, taskIndex);
                               Navigator.pop(context);
-                            }
-                          },
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red),
+                            ),
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: width,
-                    height: height / 2.7,
-                  )
-                ],
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, bottom: 8),
+                          child: DropdownButton(
+                            value: selectedSectionIndex,
+                            items: widget.board!.sections!
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: widget.board!.sections!.indexOf(e),
+                                    child: Text(
+                                      e['title'].toString(),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedSectionIndex = value;
+                                moveTaskToSection(
+                                    sectionIndex, value, taskIndex);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, bottom: 8),
+                          child: FilledButton.icon(
+                            icon: const Icon(Icons.add),
+                            label: const Text("Save task"),
+                            onPressed: () {
+                              if (_taskFormKey.currentState!.validate()) {
+                                saveTask(sectionIndex, taskIndex);
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -797,9 +799,6 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
   }
 
   void showNewSectionBottomSheet(context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
     showModalBottomSheet<dynamic>(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -809,60 +808,61 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
       builder: (context) {
         return Wrap(
           children: [
-            Form(
-              key: _sectionFormKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15, left: 20, right: 20),
-                    child: TextFormField(
-                      controller: _sectionTitleController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required';
-                        }
-                        return null;
-                      },
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      cursorColor: const Color(0xff6750a4),
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        hintText: 'Name',
-                        hintStyle: TextStyle(
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Form(
+                key: _sectionFormKey,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 20, right: 20),
+                      child: TextFormField(
+                        controller: _sectionTitleController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                         ),
+                        cursorColor: const Color(0xff6750a4),
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Name',
+                          hintStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const Divider(),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: FilledButton.icon(
-                        icon: const Icon(Icons.add),
-                        label: const Text("Add section"),
-                        onPressed: () {
-                          if (_sectionFormKey.currentState!.validate()) {
-                            addSection(_sectionTitleController.text);
-                            Navigator.pop(context);
-                          }
-                        },
+                    const Divider(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, bottom: 8),
+                        child: FilledButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text("Add section"),
+                          onPressed: () {
+                            if (_sectionFormKey.currentState!.validate()) {
+                              addSection(_sectionTitleController.text);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: width,
-                    height: height / 2.7,
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
           ],

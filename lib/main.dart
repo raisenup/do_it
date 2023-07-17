@@ -28,7 +28,6 @@ class MainApp extends StatelessWidget {
             return MaterialApp(
               title: "do it.",
               theme: themeProvider.currentTheme,
-              darkTheme: ThemeData.dark(useMaterial3: true),
               debugShowCheckedModeBanner: false,
               home: const Scaffold(
                 body: StreamHandler(),
