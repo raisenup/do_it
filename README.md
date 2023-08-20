@@ -21,4 +21,4 @@ Features include:
 * Deleting Kanban board
 
 ## Download
-Get the app from releases page.
+Get the app from [releases page](https://github.com/raisenup/do_it/releases).
