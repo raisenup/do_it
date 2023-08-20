@@ -5,7 +5,7 @@
 	<h1 align="center">do it.</h1>
 </div>
 
-do it. - is a free and open source ToDo project for Android 6.0 and above.
+do it. - is a free and open source ToDo app for Android 6.0 and above.
 
 ## Features 
 Features include:
