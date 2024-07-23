@@ -22,3 +22,21 @@ Features include:
 
 ## Download
 Get the app from [releases page](https://github.com/raisenup/do_it/releases).
+
+## Screenshots
+
+### Light theme
+<img src="screenshots/1.png" width="30%"></img> 
+<img src="screenshots/2.png" width="30%"></img> 
+<img src="screenshots/3.png" width="30%"></img> 
+<img src="screenshots/4.png" width="30%"></img> 
+<img src="screenshots/5.png" width="30%"></img> 
+<img src="screenshots/6.png" width="30%"></img>
+
+### Dark theme
+<img src="screenshots/11.png" width="30%"></img> 
+<img src="screenshots/22.png" width="30%"></img> 
+<img src="screenshots/33.png" width="30%"></img> 
+<img src="screenshots/44.png" width="30%"></img> 
+<img src="screenshots/55.png" width="30%"></img> 
+<img src="screenshots/66.png" width="30%"></img> 
